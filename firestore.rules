@@ -1,0 +1,40 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // المستخدم المسجّل فقط، وبشرط تطابق uid مع userId في المسار
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      // قراءات السكر
+      match /glucose_readings/{readingId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      // جرعات الأنسولين
+      match /insulin_doses/{doseId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      // الوجبات
+      match /meals/{mealId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      // الفحوصات الطبية
+      match /medical_checkups/{checkupId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // أي مسار آخر مرفوض افتراضياً
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

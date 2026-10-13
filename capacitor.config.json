@@ -1,0 +1,11 @@
+{
+  "appId": "com.hakim.diabetescare",
+  "appName": "مرافق السكري",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}
